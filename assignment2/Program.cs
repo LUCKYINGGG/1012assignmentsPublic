@@ -18,6 +18,7 @@ double GetPurchaseAmount(string purchaseMsg, double minPurchase)
             purchaseAmount = double.Parse(Console.ReadLine());
             if (purchaseAmount < minPurchase)
             {
+                //Console.WriteLine($"Invalid purchase amount. Must be > {minPurchase:n6}");
                 throw new Exception($"Invalid purchase amount. Must be > {minPurchase:n6}");
             }
             invalidInput = false;
@@ -32,6 +33,7 @@ double GetPurchaseAmount(string purchaseMsg, double minPurchase)
 
 double stakeRate = 0.031;
 Console.WriteLine($"\nCurrent stake rate is {stakeRate:p3}");
+
 double getCommissionRate(double userPurchaseAmount)
 {
     double commissionRate = 0;
@@ -39,16 +41,16 @@ double getCommissionRate(double userPurchaseAmount)
     {
         commissionRate = 0.019;
     }
-    else if (userPurchaseAmount > 1 && userPurchaseAmount < 5)
+    else if (userPurchaseAmount >= 1 && userPurchaseAmount < 5)
     {
         commissionRate = 0.0175;
     }
-    else if (userPurchaseAmount > 5 && userPurchaseAmount < 10)
+    else if (userPurchaseAmount >= 5 && userPurchaseAmount < 10)
     {
         commissionRate = 0.015;
     }
     else
-        commissionRate = 0.0125;
+        {commissionRate = 0.0125;}
     return commissionRate;
 }
 double monthlyStakeReward = ETHprice * stakeRate / 12;
@@ -96,7 +98,7 @@ void getStake()
                 invalidInput = false;
             }
             else
-                throw new Exception($"Invalid input. Must be y or n");
+                {throw new Exception($"Invalid input. Must be y or n");}
         }
         catch (Exception stakeEx)
         {
@@ -126,7 +128,7 @@ void getCountinue()
                 invalidInput = false;
             }
             else
-                throw new Exception($"Invalid input. Must be y or n");
+                {throw new Exception($"Invalid input. Must be y or n");}
         }
         catch (Exception continueEx)
         {

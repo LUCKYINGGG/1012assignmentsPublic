@@ -50,7 +50,7 @@ double getCommissionRate(double userPurchaseAmount)
         commissionRate = 0.015;
     }
     else
-        {commissionRate = 0.0125;}
+    {commissionRate = 0.0125;}
     return commissionRate;
 }
 double monthlyStakeReward = ETHprice * stakeRate / 12;
@@ -98,7 +98,7 @@ void getStake()
                 invalidInput = false;
             }
             else
-                {throw new Exception($"Invalid input. Must be y or n");}
+            {throw new Exception($"Invalid input. Must be y or n");}
         }
         catch (Exception stakeEx)
         {
@@ -128,7 +128,7 @@ void getCountinue()
                 invalidInput = false;
             }
             else
-                {throw new Exception($"Invalid input. Must be y or n");}
+            {throw new Exception($"Invalid input. Must be y or n");}
         }
         catch (Exception continueEx)
         {
@@ -146,6 +146,7 @@ Console.WriteLine("\nThank you for using DMITCryptoEx!");
 
 
 /*
+The following code is only for my own exploration.
 void getOrderView(string prompMessage, double orderValue)
 {
     if (prompMessage == "ETH spot price" || prompMessage == "Total commission" || prompMessage == "Total purchase" || prompMessage == "Stake monthly reward")

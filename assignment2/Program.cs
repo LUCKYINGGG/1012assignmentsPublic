@@ -34,7 +34,7 @@ double GetPurchaseAmount(string purchaseMsg, double minPurchase)
 double stakeRate = 0.031;
 Console.WriteLine($"\nCurrent stake rate is {stakeRate:p3}");
 
-double getCommissionRate(double userPurchaseAmount)
+double GetCommissionRate(double userPurchaseAmount)
 {
     double commissionRate = 0;
     if (userPurchaseAmount > 0 && userPurchaseAmount < 1)
@@ -50,12 +50,14 @@ double getCommissionRate(double userPurchaseAmount)
         commissionRate = 0.015;
     }
     else
-    {commissionRate = 0.0125;}
+    {
+        commissionRate = 0.0125;
+    }
     return commissionRate;
 }
 double monthlyStakeReward = ETHprice * stakeRate / 12;
 
-void getStake()
+void GetStake()
 {
     bool invalidInput = true;
     while (invalidInput)
@@ -69,7 +71,7 @@ void getStake()
                 Console.WriteLine($"\nYou will earn {monthlyStakeReward:c} per month for your staked ETH.");
                 Console.WriteLine($"\nPlease review your order ...\n");
                 Console.WriteLine($"Total ETH purchased: {userPurchaseAmount:n6}");
-                double commissionRate = getCommissionRate(userPurchaseAmount);
+                double commissionRate = GetCommissionRate(userPurchaseAmount);
                 double totalCommission = ETHprice * commissionRate;
                 double totalPurchase = ETHprice * userPurchaseAmount + totalCommission;
                 Console.WriteLine($"Total ETH purchased: {userPurchaseAmount}");
@@ -85,7 +87,7 @@ void getStake()
             else if (stakeAnswer.ToLower() == "n")
             {
                 Console.WriteLine($"\nPlease review your order ...\n");
-                double commissionRate = getCommissionRate(userPurchaseAmount);
+                double commissionRate = GetCommissionRate(userPurchaseAmount);
                 double totalCommission = ETHprice * commissionRate;
                 double totalPurchase = ETHprice * userPurchaseAmount + totalCommission;
                 Console.WriteLine($"Total ETH purchased: {userPurchaseAmount:n6}");
@@ -98,7 +100,9 @@ void getStake()
                 invalidInput = false;
             }
             else
-            {throw new Exception($"Invalid input. Must be y or n");}
+            {
+                throw new Exception($"Invalid input. Must be y or n");
+            }
         }
         catch (Exception stakeEx)
         {
@@ -106,9 +110,9 @@ void getStake()
         }
     }
 }
-getStake();
+GetStake();
 
-void getCountinue()
+void GetCountinue()
 {
     bool invalidInput = true;
     while (invalidInput)
@@ -128,7 +132,9 @@ void getCountinue()
                 invalidInput = false;
             }
             else
-            {throw new Exception($"Invalid input. Must be y or n");}
+            {
+                throw new Exception($"Invalid input. Must be y or n");
+            }
         }
         catch (Exception continueEx)
         {
@@ -136,33 +142,10 @@ void getCountinue()
         }
     }
 }
-getCountinue();
+GetCountinue();
 
 Console.WriteLine("\nThank you for using DMITCryptoEx!");
 
 
 
 
-
-
-/*
-The following code is only for my own exploration.
-void getOrderView(string prompMessage, double orderValue)
-{
-    if (prompMessage == "ETH spot price" || prompMessage == "Total commission" || prompMessage == "Total purchase" || prompMessage == "Stake monthly reward")
-    {
-        Console.WriteLine($"{prompMessage}: {orderValue:c}");
-    }
-    else
-        Console.WriteLine($"{prompMessage}: {orderValue:n2}");
-}*/
-
-/*
-    getOrderView("Total ETH purchased", userPurchaseAmount);
-    getOrderView("ETH spot price", ETHprice);
-    getOrderView("Commission rate", commissionRate);
-    getOrderView("Total commission", totalCommission);
-    Console.WriteLine($"Staked? {stakeAnswer}");
-    getOrderView("Stake monthly reward", monthlyStakeReward);
-    Console.WriteLine("-----------------------------------------------------------------");
-    getOrderView("Total purchase", totalPurchase); */

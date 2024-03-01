@@ -4,8 +4,6 @@ Random rnd = new Random();
 double ETHprice = rnd.Next(2601, 3000);
 Console.WriteLine($"Current ETH spot price is : {ETHprice:c2} \n");
 
-double userPurchaseAmount = GetPurchaseAmount($"Enter amount of ETH to purchase: ", 0.000001);
-
 double GetPurchaseAmount(string purchaseMsg, double minPurchase)
 {
     bool invalidInput = true;
@@ -30,6 +28,7 @@ double GetPurchaseAmount(string purchaseMsg, double minPurchase)
     }
     return purchaseAmount;
 }
+double userPurchaseAmount = GetPurchaseAmount($"Enter amount of ETH to purchase: ", 0.000001);
 
 double stakeRate = 0.031;
 Console.WriteLine($"\nCurrent stake rate is {stakeRate:p3}");

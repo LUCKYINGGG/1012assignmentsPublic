@@ -148,7 +148,7 @@ double FindHighestValueInMemory(double[] values, int logicalSize)
         {
             max = values[logicalSize];
         }
-        
+
     }
     return max;
     //TODO: Replace this code with yours to implement this function.
@@ -163,7 +163,7 @@ double FindLowestValueInMemory(double[] values, int logicalSize)
         {
             min = values[logicalSize];
         }
-        
+
     }
     return min;
     //TODO: Replace this code with yours to implement this function.
@@ -188,11 +188,64 @@ void SaveMemoryValuesToFile(string[] dates, double[] values, int logicalSize)
     //TODO: Replace this code with yours to implement this function.
 }
 
+string PromptDate(string prompt)
+{
+    DateTime date = DateTime.Today;
+    string dateString = prompt;
+    while (true)
+    {
+        try
+        {
+            Console.WriteLine(prompt);
+            date = DateTime.Parse(Console.ReadLine());
+            dateString = date.ToString("MM-dd-yyyy");
+            return dateString;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}");
+        }
+    }
+}
+
+double PromptDouble(string prompt, double min, double max)
+{
+    double addValue = 0;
+    while (true)
+    {
+        try
+        {
+            Console.WriteLine(prompt);
+            addValue = double.Parse(Console.ReadLine());
+            if (addValue < min && addValue > max)
+            {
+                throw new Exception($"Please enter a valid double between {min} and {max}: ");
+            }
+            return addValue;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}");
+        }
+    }
+}
+
 int AddMemoryValues(string[] dates, double[] values, int logicalSize)
 {
-    
-    Console.WriteLine("Not Implemented Yet");
-    return 0;
+
+    if (logicalSize < physicalSize)
+    {
+        string StringDate = PromptDate($"Enter the Date of the entry in the format of mm-dd-yyyy (eg 11-23-2023): ");
+        double DoubleValue = PromptDouble($"Enter a double value", 0.0, 1000.0);
+        dates[logicalSize] = StringDate;
+        values[logicalSize] = DoubleValue;
+        return logicalSize++;
+    }
+    else
+    {
+        Console.WriteLine($"This month has no spare days for adding entry.");
+        return logicalSize;
+    }
     //TODO: Replace this code with yours to implement this function.
 }
 

@@ -87,8 +87,16 @@ void DisplayAnalysisMenu()
 string Prompt(string prompt)
 {
     string response = "";
-    Console.Write(prompt);
-    response = Console.ReadLine();
+    try
+    {
+        Console.Write(prompt);
+        response = Console.ReadLine().Trim();
+
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Invalid input: {ex.Message}");
+    }
     return response;
 }
 
@@ -148,7 +156,6 @@ double FindHighestValueInMemory(double[] values, int logicalSize)
         {
             max = values[logicalSize];
         }
-
     }
     return max;
     //TODO: Replace this code with yours to implement this function.
@@ -184,6 +191,7 @@ void FindAverageOfValuesInMemory(double[] values, int logicalSize)
 
 void SaveMemoryValuesToFile(string[] dates, double[] values, int logicalSize)
 {
+
     Console.WriteLine("Not Implemented Yet");
     //TODO: Replace this code with yours to implement this function.
 }
@@ -210,23 +218,27 @@ string PromptDate(string prompt)
 
 double PromptDouble(string prompt, double min, double max)
 {
-    double addValue = 0;
+    double value = 0;
     while (true)
     {
         try
         {
             Console.WriteLine(prompt);
-            addValue = double.Parse(Console.ReadLine());
-            if (addValue < min && addValue > max)
+            value = double.Parse(Console.ReadLine());
+            if (value > min && value < max)
             {
-                throw new Exception($"Please enter a valid double between {min} and {max}: ");
+                return value;
             }
-            return addValue;
+            // else
+            // {
+            //     throw new Exception($"Please enter a valid double between {min} and {max}.");
+            // }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"{ex.Message}");
+            Console.WriteLine($"Please enter a valid double between {min} and {max}: {ex.Message}");
         }
+        
     }
 }
 
@@ -236,7 +248,7 @@ int AddMemoryValues(string[] dates, double[] values, int logicalSize)
     if (logicalSize < physicalSize)
     {
         string StringDate = PromptDate($"Enter the Date of the entry in the format of mm-dd-yyyy (eg 11-23-2023): ");
-        double DoubleValue = PromptDouble($"Enter a double value", 0.0, 1000.0);
+        double DoubleValue = PromptDouble($"Enter a double value: ", 0.0, 1000.0);
         dates[logicalSize] = StringDate;
         values[logicalSize] = DoubleValue;
         return logicalSize++;
@@ -251,7 +263,26 @@ int AddMemoryValues(string[] dates, double[] values, int logicalSize)
 
 void EditMemoryValues(string[] dates, double[] values, int logicalSize)
 {
-    Console.WriteLine("Not Implemented Yet");
+    PromptDate("Please select a date of entry: ");
+    string editDate = Console.ReadLine();
+    for (int i = 0; i < logicalSize; i++)
+    {
+        if (editDate.Equals(dates[i]))
+        {
+            dates[i] = editDate;
+        }
+        else
+        {
+            Console.WriteLine("There is no matching date of entry. Please load files or enter data before editing.");
+        }
+    }
+    PromptDouble("Please enter an updated value: ", 0.0, 1000.0);
+    double editValue = double.Parse(Console.ReadLine());
+    for (int j = 0; j < logicalSize; j++)
+    {
+        values[j] = editValue;
+    }
+
     //TODO: Replace this code with yours to implement this function.
 }
 

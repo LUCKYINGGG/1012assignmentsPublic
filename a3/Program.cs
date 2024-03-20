@@ -115,7 +115,7 @@ int LoadFileValuesToMemory(string[] dates, double[] values)
     int logicalSize = 0;
     string filePath = $"./data/{fileName}";
     if (!File.Exists(filePath))
-        throw new Exception($"The file {fileName} does not exist.");
+        throw new Exception($"The file {fileName} does not exist.");   
     string[] csvFileInput = File.ReadAllLines(filePath);
     Console.WriteLine("  Dates          Values");
     for (int i = 1; i < csvFileInput.Length - 1; i++)
@@ -140,10 +140,14 @@ void DisplayMemoryValues(string[] dates, double[] values, int logicalSize)
 {
     if (logicalSize == 0)
         throw new Exception($"No Entries loaded. Please load a file to memory or add a value in memory");
+    Array.Sort(dates, values);
     Console.WriteLine($"\nCurrent Loaded Entries: {logicalSize}");
     Console.WriteLine($"   Date     Value");
     for (int i = 0; i < logicalSize; i++)
+    {
         Console.WriteLine($"{dates[i]}   {values[i]}");
+    }
+        
 }
 
 double FindHighestValueInMemory(double[] values, int logicalSize)
@@ -292,11 +296,20 @@ void EditMemoryValues(string[] dates, double[] values, int logicalSize)
 
 void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
 {
-    double max = FindHighestValueInMemory(values, logicalSize);
-    for(int i = 0; i < physicalSize; i++)
+    double max = 0;
+    for (int i = 0; i < logicalSize; i++)
+    {
+        if (max < values[i])
+        {
+            max = values[i];
+        }
+    }
+    double yAxisMaxRoundUp = Math.Ceiling(max) + Math.Round(max / 10);
+    Console.WriteLine(yAxisMaxRoundUp);
+    for (int i = 0; i < yAxisMaxRoundUp; i++)
     {
         Console.WriteLine($"{values[i]}");
     }
-    Console.WriteLine("Not Implemented Yet");
+
     //TODO: Replace this code with yours to implement this function.
 }

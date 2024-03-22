@@ -2,6 +2,8 @@
 // TODO: declare a constant to represent the max size of the values
 // and dates arrays. The arrays must be large enough to store
 // values for an entire month.
+using Microsoft.VisualBasic;
+
 int physicalSize = 31;
 int logicalSize = 0;
 
@@ -115,7 +117,7 @@ int LoadFileValuesToMemory(string[] dates, double[] values)
     int logicalSize = 0;
     string filePath = $"./data/{fileName}";
     if (!File.Exists(filePath))
-        throw new Exception($"The file {fileName} does not exist.");   
+        throw new Exception($"The file {fileName} does not exist.");
     string[] csvFileInput = File.ReadAllLines(filePath);
     Console.WriteLine("  Dates          Values");
     for (int i = 1; i < csvFileInput.Length - 1; i++)
@@ -140,14 +142,14 @@ void DisplayMemoryValues(string[] dates, double[] values, int logicalSize)
 {
     if (logicalSize == 0)
         throw new Exception($"No Entries loaded. Please load a file to memory or add a value in memory");
-    Array.Sort(dates, values);
+    Array.Sort(dates, values, 0, logicalSize);
     Console.WriteLine($"\nCurrent Loaded Entries: {logicalSize}");
     Console.WriteLine($"   Date     Value");
     for (int i = 0; i < logicalSize; i++)
     {
         Console.WriteLine($"{dates[i]}   {values[i]}");
     }
-        
+
 }
 
 double FindHighestValueInMemory(double[] values, int logicalSize)
@@ -195,8 +197,22 @@ void FindAverageOfValuesInMemory(double[] values, int logicalSize)
 
 void SaveMemoryValuesToFile(string[] dates, double[] values, int logicalSize)
 {
-
-    Console.WriteLine("Not Implemented Yet");
+    string fileName = Prompt("Please enter file name including .csv or .txt: ");
+    string filePath = $"./data.{fileName}";
+    if (logicalSize == 0)
+        throw new Exception($"No entries loaded. Please load or add entries into memory.");
+    if (logicalSize > 1)
+    {
+        Array.Sort(dates, values, 0, logicalSize);
+    }
+    string[] csvFileLines = new string[logicalSize + 1];
+    csvFileLines[0] = "dates,values";
+    for (int i = 1; i <= logicalSize; i++)
+    {
+        csvFileLines = $"{dates[i - 1],values[i - 1].ToString}";
+    }
+    File.AppendAllLines(filePath, csvFileLines);
+    Console.WriteLine($"Save completed. {fileName} has {logicalSize} entries.");
     //TODO: Replace this code with yours to implement this function.
 }
 
@@ -294,22 +310,66 @@ void EditMemoryValues(string[] dates, double[] values, int logicalSize)
     //TODO: Replace this code with yours to implement this function.
 }
 
+
 void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
 {
+    Array.Sort(dates, values, 0, logicalSize);
     double max = 0;
-    for (int i = 0; i < logicalSize; i++)
+    for (int i = 0; i < physicalSize; i++)
     {
         if (max < values[i])
         {
             max = values[i];
         }
     }
-    double yAxisMaxRoundUp = Math.Ceiling(max) + Math.Round(max / 10);
-    Console.WriteLine(yAxisMaxRoundUp);
-    for (int i = 0; i < yAxisMaxRoundUp; i++)
+    int yAxisMaxRoundUp = Convert.ToInt32(Math.Ceiling(max));
+
+    int yAxisInterval;
+
+    if (yAxisMaxRoundUp < 100)
     {
-        Console.WriteLine($"{values[i]}");
+        yAxisInterval = 5;
+    }
+    else
+    {
+        yAxisInterval = 10;
     }
 
+    int yAxisNum = yAxisMaxRoundUp / yAxisInterval + 1;
+    Console.WriteLine($"\t\t Sales for selected month");
+
+    for (int i = 0; i < yAxisNum; i++)
+    {
+        Console.Write($" ${yAxisMaxRoundUp}");
+        if (yAxisMaxRoundUp < 10)
+        {
+            Console.Write("   |");
+        }
+        else if (yAxisMaxRoundUp > 100)
+        {
+            Console.Write(" |");
+        }
+        else
+        {
+            Console.Write("  |");
+        }
+        Console.Write(" ");
+        for (int h = 0; h < physicalSize; h++)
+        {
+            Console.Write($" {values[h]} ");
+        }
+        yAxisMaxRoundUp -= yAxisInterval;
+        Console.WriteLine("");
+    }
+    for (int j = 0; j < physicalSize; j++)
+    {
+        Console.Write($"----");
+    }
+    Console.Write("\n Days | ");
+    for (int k = 1; k < physicalSize + 1; k++)
+    {
+        Console.Write($" {k} ");
+    }
+    Console.WriteLine("\n");
     //TODO: Replace this code with yours to implement this function.
 }

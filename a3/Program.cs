@@ -209,7 +209,7 @@ void SaveMemoryValuesToFile(string[] dates, double[] values, int logicalSize)
     csvFileLines[0] = "dates,values";
     for (int i = 1; i <= logicalSize; i++)
     {
-        csvFileLines = $"{dates[i - 1],values[i - 1].ToString}";
+        csvFileLines[i] = $"{dates[i - 1]}, {values[i - 1].ToString()}";
     }
     File.AppendAllLines(filePath, csvFileLines);
     Console.WriteLine($"Save completed. {fileName} has {logicalSize} entries.");

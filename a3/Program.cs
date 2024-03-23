@@ -336,15 +336,15 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
     }
 
     double[] valuesOfMonth = new double[32];
-    for (int i = 0; i < physicalSize; i++)
+    for (int i = 0; i < logicalSize; i++)
     {
-        if ( dates[i] != null)
+        if (dates[i] != null)
         {
             string date = dates[i];
-        string test = date.Substring(3, 2);
-        int intDate = int.Parse(date.Substring(3, 2));
-        double value = values[i];
-        valuesOfMonth[intDate] = value;
+            string test = date.Substring(3, 2);
+            int intDate = int.Parse(date.Substring(3, 2));
+            double value = values[i];
+            valuesOfMonth[intDate] = value;
         }
     }
 

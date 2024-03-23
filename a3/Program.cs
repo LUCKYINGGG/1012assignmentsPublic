@@ -118,21 +118,23 @@ int LoadFileValuesToMemory(string[] dates, double[] values)
     string filePath = $"./data/{fileName}";
     if (!File.Exists(filePath))
         throw new Exception($"The file {fileName} does not exist.");
+
     string[] csvFileInput = File.ReadAllLines(filePath);
     Console.WriteLine("  Dates          Values");
     for (int i = 1; i < csvFileInput.Length - 1; i++)
     {
         string[] items = csvFileInput[i].Split(',');
-        for (int j = 0; j < items.Length - 1; j++)
-        {
-            Console.WriteLine($"{items[j]}        {items[j + 1]}");
-        }
         if (i != 0)
         {
             dates[logicalSize] = items[0];
             values[logicalSize] = double.Parse(items[1]);
             logicalSize++;
         }
+    }
+    Array.Sort(dates, values, 0, logicalSize);
+    for (int j = 0; j < logicalSize; j++)
+    {
+        Console.WriteLine($"{dates[j]}        {values[j]}");
     }
     Console.WriteLine($"Load complete. {fileName} has {logicalSize} data entries");
     return logicalSize;
@@ -189,7 +191,6 @@ void FindAverageOfValuesInMemory(double[] values, int logicalSize)
     {
         sum += values[i];
     }
-    //return sum / values.Length;
     double avg = sum / logicalSize;
     Console.WriteLine($"The average is {avg:n2}.");
     //TODO: Replace this code with yours to implement this function.
@@ -292,24 +293,22 @@ void EditMemoryValues(string[] dates, double[] values, int logicalSize)
             if (editDate.Equals(dates[i]))
             {
                 dates[i] = editDate;
+                double editValue = PromptDouble("Please enter an updated value: ", 0.0, 1000.0);
+                values[i] = editValue;
+                Console.WriteLine($"You have edited one entry at {editDate} with the value of {editValue}.");
+                break;
             }
-            else
+            else if (i == logicalSize - 1)
             {
                 Console.WriteLine("There is no matching date of entry. Please load files or enter data before editing.");
             }
         }
-        double editValue = PromptDouble("Please enter an updated value: ", 0.0, 1000.0);
-        for (int j = 0; j < logicalSize; j++)
-        {
-            values[j] = editValue;
-        }
-        Console.WriteLine($"You have edited one entry at {editDate} with the value of {editValue}.");
+
         Prompt("Do you want to edit more entries? Please answer Y or N.");
         addMore = Console.ReadLine().ToUpper();
     } while (addMore != "N");
     //TODO: Replace this code with yours to implement this function.
 }
-
 
 void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
 {
@@ -369,11 +368,11 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
         Console.Write(" ");
         for (int h = 0; h < physicalSize; h++)
         {
-            if (valuesOfMonth[h] >= yAxisMaxRoundUp - yAxisInterval && valuesOfMonth[h] < yAxisMaxRoundUp)
-                Console.Write($" {valuesOfMonth[h]} ");
+            if (valuesOfMonth[h] >= yAxisMaxRoundUp && valuesOfMonth[h] < yAxisMaxRoundUp + yAxisInterval)
+                Console.Write($" {valuesOfMonth[h]}");
             else
             {
-                Console.Write("   ");
+                Console.Write("    ");
             }
         }
 

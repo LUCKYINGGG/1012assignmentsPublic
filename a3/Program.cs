@@ -335,6 +335,19 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
         yAxisInterval = 10;
     }
 
+    double[] valuesOfMonth = new double[32];
+    for (int i = 0; i < physicalSize; i++)
+    {
+        if ( dates[i] != null)
+        {
+            string date = dates[i];
+        string test = date.Substring(3, 2);
+        int intDate = int.Parse(date.Substring(3, 2));
+        double value = values[i];
+        valuesOfMonth[intDate] = value;
+        }
+    }
+
     int yAxisNum = yAxisMaxRoundUp / yAxisInterval + 1;
     Console.WriteLine($"\t\t Sales for selected month");
 
@@ -356,8 +369,14 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
         Console.Write(" ");
         for (int h = 0; h < physicalSize; h++)
         {
-            Console.Write($" {values[h]} ");
+            if (valuesOfMonth[h] >= yAxisMaxRoundUp - yAxisInterval && valuesOfMonth[h] < yAxisMaxRoundUp)
+                Console.Write($" {valuesOfMonth[h]} ");
+            else
+            {
+                Console.Write("   ");
+            }
         }
+
         yAxisMaxRoundUp -= yAxisInterval;
         Console.WriteLine("");
     }

@@ -121,7 +121,7 @@ int LoadFileValuesToMemory(string[] dates, double[] values)
 
     string[] csvFileInput = File.ReadAllLines(filePath);
     Console.WriteLine("  Dates          Values");
-    for (int i = 1; i < csvFileInput.Length - 1; i++)
+    for (int i = 1; i < csvFileInput.Length; i++)
     {
         string[] items = csvFileInput[i].Split(',');
         if (i != 0)
@@ -142,6 +142,7 @@ int LoadFileValuesToMemory(string[] dates, double[] values)
 
 void DisplayMemoryValues(string[] dates, double[] values, int logicalSize)
 {
+    Array.Sort(dates, values, 0, logicalSize);
     if (logicalSize == 0)
         throw new Exception($"No Entries loaded. Please load a file to memory or add a value in memory");
     Array.Sort(dates, values, 0, logicalSize);
@@ -199,7 +200,7 @@ void FindAverageOfValuesInMemory(double[] values, int logicalSize)
 void SaveMemoryValuesToFile(string[] dates, double[] values, int logicalSize)
 {
     string fileName = Prompt("Please enter file name including .csv or .txt: ");
-    string filePath = $"./data.{fileName}";
+    string filePath = $"./data/{fileName}";
     if (logicalSize == 0)
         throw new Exception($"No entries loaded. Please load or add entries into memory.");
     if (logicalSize > 1)
@@ -248,6 +249,7 @@ double PromptDouble(string prompt, double min, double max)
             value = double.Parse(Console.ReadLine());
             if (value > min && value < max)
             {
+                value = Math.Round(value, 1);
                 return value;
             }
         }
@@ -269,7 +271,7 @@ int AddMemoryValues(string[] dates, double[] values, int logicalSize)
             double DoubleValue = PromptDouble($"Enter a double value: ", 0.0, 1000.0);
             dates[logicalSize] = StringDate;
             values[logicalSize] = DoubleValue;
-            logicalSize = +logicalSize;
+            logicalSize++;
             Console.WriteLine($"You have entered one entry at date {dates[logicalSize]} with value {values[logicalSize]}.");
         }
         else
@@ -303,9 +305,7 @@ void EditMemoryValues(string[] dates, double[] values, int logicalSize)
                 Console.WriteLine("There is no matching date of entry. Please load files or enter data before editing.");
             }
         }
-
-        Prompt("Do you want to edit more entries? Please answer Y or N.");
-        addMore = Console.ReadLine().ToUpper();
+        addMore = Prompt("Do you want to edit more entries? Please answer Y or N.").ToUpper();
     } while (addMore != "N");
     //TODO: Replace this code with yours to implement this function.
 }
@@ -333,7 +333,6 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
     {
         yAxisInterval = 10;
     }
-
     double[] valuesOfMonth = new double[32];
     for (int i = 0; i < logicalSize; i++)
     {
@@ -366,27 +365,31 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
             Console.Write("  |");
         }
         Console.Write(" ");
-        for (int h = 0; h < physicalSize; h++)
+        for (int h = 1; h < physicalSize + 1; h++)
         {
             if (valuesOfMonth[h] >= yAxisMaxRoundUp && valuesOfMonth[h] < yAxisMaxRoundUp + yAxisInterval)
-                Console.Write($" {valuesOfMonth[h]}");
+            {
+                valuesOfMonth[h] = Math.Floor(valuesOfMonth[h]);
+                string strValues = valuesOfMonth[h].ToString().PadRight(4);
+                Console.Write($"{strValues}");
+            }
             else
             {
                 Console.Write("    ");
             }
         }
-
         yAxisMaxRoundUp -= yAxisInterval;
         Console.WriteLine("");
     }
-    for (int j = 0; j < physicalSize; j++)
+    for (int j = 0; j < physicalSize + 2; j++)
     {
         Console.Write($"----");
     }
     Console.Write("\n Days | ");
     for (int k = 1; k < physicalSize + 1; k++)
     {
-        Console.Write($" {k} ");
+        string strK = k.ToString().PadRight(4);
+        Console.Write($"{strK}");
     }
     Console.WriteLine("\n");
     //TODO: Replace this code with yours to implement this function.

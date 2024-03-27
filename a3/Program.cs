@@ -142,7 +142,6 @@ int LoadFileValuesToMemory(string[] dates, double[] values)
 
 void DisplayMemoryValues(string[] dates, double[] values, int logicalSize)
 {
-    Array.Sort(dates, values, 0, logicalSize);
     if (logicalSize == 0)
         throw new Exception($"No Entries loaded. Please load a file to memory or add a value in memory");
     Array.Sort(dates, values, 0, logicalSize);
@@ -152,7 +151,6 @@ void DisplayMemoryValues(string[] dates, double[] values, int logicalSize)
     {
         Console.WriteLine($"{dates[i]}   {values[i]}");
     }
-
 }
 
 double FindHighestValueInMemory(double[] values, int logicalSize)
@@ -247,7 +245,7 @@ double PromptDouble(string prompt, double min, double max)
         {
             Console.WriteLine(prompt);
             value = double.Parse(Console.ReadLine());
-            if (value > min && value < max)
+            if (value >= min && value < max)
             {
                 value = Math.Round(value, 1);
                 return value;
@@ -267,12 +265,28 @@ int AddMemoryValues(string[] dates, double[] values, int logicalSize)
     {
         if (logicalSize <= physicalSize)
         {
-            string StringDate = PromptDate($"Enter the Date of the entry in the format of mm-dd-yyyy (eg 11-23-2023): ");
-            double DoubleValue = PromptDouble($"Enter a double value: ", 0.0, 1000.0);
-            dates[logicalSize] = StringDate;
-            values[logicalSize] = DoubleValue;
-            logicalSize++;
-            Console.WriteLine($"You have entered one entry at date {dates[logicalSize]} with value {values[logicalSize]}.");
+            try
+            {
+                string StringDate = PromptDate($"Enter the Date of the entry in the format of mm-dd-yyyy (eg 11-23-2023): ");
+                // TODO: handle multi user input. what if user input same dates multiple times?
+                int flag = Array.IndexOf(dates, StringDate);
+                if (flag == -1)
+                {
+                    double DoubleValue = PromptDouble($"Enter a double value: ", 0.0, 1000.0);
+                    dates[logicalSize] = StringDate;
+                    values[logicalSize] = DoubleValue;
+                    logicalSize++;
+                    Console.WriteLine($"You have entered one entry at date {dates[logicalSize - 1]} with value {values[logicalSize - 1]}.");
+                }
+                else
+                {
+                    throw new Exception("Please enter a different date. ");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
         }
         else
         {
@@ -313,14 +327,7 @@ void EditMemoryValues(string[] dates, double[] values, int logicalSize)
 void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
 {
     Array.Sort(dates, values, 0, logicalSize);
-    double max = 0;
-    for (int i = 0; i < physicalSize; i++)
-    {
-        if (max < values[i])
-        {
-            max = values[i];
-        }
-    }
+    double max = FindHighestValueInMemory(values, physicalSize);
     int yAxisMaxRoundUp = Convert.ToInt32(Math.Ceiling(max));
 
     int yAxisInterval;
@@ -329,9 +336,13 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
     {
         yAxisInterval = 5;
     }
-    else
+    else if (yAxisMaxRoundUp >= 100 && yAxisMaxRoundUp < 300)
     {
         yAxisInterval = 10;
+    }
+    else
+    {
+        yAxisInterval = 50;
     }
     double[] valuesOfMonth = new double[32];
     for (int i = 0; i < logicalSize; i++)
@@ -349,6 +360,7 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
     int yAxisNum = yAxisMaxRoundUp / yAxisInterval + 1;
     Console.WriteLine($"\t\t Sales for selected month");
 
+    //TO DO: Since interval changed, check this.
     for (int i = 0; i < yAxisNum; i++)
     {
         Console.Write($" ${yAxisMaxRoundUp}");
@@ -371,7 +383,7 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
             {
                 valuesOfMonth[h] = Math.Floor(valuesOfMonth[h]);
                 string strValues = valuesOfMonth[h].ToString().PadRight(4);
-                Console.Write($"{strValues}");
+                Console.Write(strValues);
             }
             else
             {
@@ -389,7 +401,7 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
     for (int k = 1; k < physicalSize + 1; k++)
     {
         string strK = k.ToString().PadRight(4);
-        Console.Write($"{strK}");
+        Console.Write(strK);
     }
     Console.WriteLine("\n");
     //TODO: Replace this code with yours to implement this function.

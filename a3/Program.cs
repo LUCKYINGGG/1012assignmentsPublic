@@ -118,23 +118,18 @@ int LoadFileValuesToMemory(string[] dates, double[] values)
     string filePath = $"./data/{fileName}";
     if (!File.Exists(filePath))
         throw new Exception($"The file {fileName} does not exist.");
-
     string[] csvFileInput = File.ReadAllLines(filePath);
-    Console.WriteLine("  Dates          Values");
+    Console.WriteLine($"Dates         Values");
     for (int i = 1; i < csvFileInput.Length; i++)
     {
         string[] items = csvFileInput[i].Split(',');
+        Console.WriteLine($"{items[0]}    {items[1]}");
         if (i != 0)
         {
             dates[logicalSize] = items[0];
             values[logicalSize] = double.Parse(items[1]);
             logicalSize++;
         }
-    }
-    Array.Sort(dates, values, 0, logicalSize);
-    for (int j = 0; j < logicalSize; j++)
-    {
-        Console.WriteLine($"{dates[j]}        {values[j]}");
     }
     Console.WriteLine($"Load complete. {fileName} has {logicalSize} data entries");
     return logicalSize;
@@ -211,7 +206,7 @@ void SaveMemoryValuesToFile(string[] dates, double[] values, int logicalSize)
     {
         csvFileLines[i] = $"{dates[i - 1]}, {values[i - 1].ToString()}";
     }
-    File.AppendAllLines(filePath, csvFileLines);
+    File.WriteAllLines(filePath, csvFileLines);
     Console.WriteLine($"Save completed. {fileName} has {logicalSize} entries.");
     //TODO: Replace this code with yours to implement this function.
 }
@@ -250,10 +245,12 @@ double PromptDouble(string prompt, double min, double max)
                 value = Math.Round(value, 1);
                 return value;
             }
+            else
+                throw new Exception($"Invalida input: ");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Please enter a valid double between {min} and {max}: {ex.Message}");
+            Console.WriteLine($"{ex.Message}Please enter a valid double between {min} and {max}.");
         }
     }
 }
@@ -280,12 +277,12 @@ int AddMemoryValues(string[] dates, double[] values, int logicalSize)
                 }
                 else
                 {
-                    throw new Exception("Please enter a different date. ");
+                    throw new Exception("This date has already in the file. Please enter a different date. ");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ex.Message}");
+                Console.WriteLine(ex.Message);
             }
         }
         else
@@ -301,6 +298,10 @@ int AddMemoryValues(string[] dates, double[] values, int logicalSize)
 void EditMemoryValues(string[] dates, double[] values, int logicalSize)
 {
     string addMore;
+    if (logicalSize == 0)
+    {
+        throw new Exception($"No entries loaded. Please load a file to memory or add a value in memory.");
+    }
     do
     {
         string editDate = PromptDate("Please select a date of entry in the format of mm-dd-yyyy (eg 11-23-2023): ");
@@ -358,25 +359,25 @@ void GraphValuesInMemory(string[] dates, double[] values, int logicalSize)
     }
 
     int yAxisNum = yAxisMaxRoundUp / yAxisInterval + 1;
-    Console.WriteLine($"\t\t Sales for selected month");
-
-    //TO DO: Since interval changed, check this.
+    Console.WriteLine($"\t\t\t\t Sales for selected month");
+    string empty = "";
+    char bar = '|';
     for (int i = 0; i < yAxisNum; i++)
     {
         Console.Write($" ${yAxisMaxRoundUp}");
         if (yAxisMaxRoundUp < 10)
         {
-            Console.Write("   |");
+            Console.Write(empty.PadLeft(3)+bar);
         }
-        else if (yAxisMaxRoundUp > 100)
+        else if (yAxisMaxRoundUp >= 100)
         {
-            Console.Write(" |");
+            Console.Write(empty.PadLeft(1)+bar);
         }
         else
         {
-            Console.Write("  |");
+            Console.Write(empty.PadLeft(2)+bar);
         }
-        Console.Write(" ");
+        // Console.Write(" ");
         for (int h = 1; h < physicalSize + 1; h++)
         {
             if (valuesOfMonth[h] >= yAxisMaxRoundUp && valuesOfMonth[h] < yAxisMaxRoundUp + yAxisInterval)

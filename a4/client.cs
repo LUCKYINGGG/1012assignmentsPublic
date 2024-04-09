@@ -9,7 +9,16 @@ namespace ClientInfor
         private int _weight;
         private int _height;
 
-//greedy constructor
+        //non-greedy constructor
+        public Client()
+        {
+            _firstname = "";
+            _lastname = "";
+            _weight = 0;
+            _height = 0;
+        }
+
+        //greedy constructor
         public Client(string firstname, string lastname, int weight, int height)
         {
             _firstname = firstname;
@@ -18,7 +27,7 @@ namespace ClientInfor
             _height = height;
         }
 
-//Properties
+        //Properties
         public string Firstname
         {
             get { return _firstname; }
@@ -28,25 +37,29 @@ namespace ClientInfor
         {
             get { return _lastname; }
         }
-        
-        public int Weight{
+
+        public int Weight
+        {
             get { return _weight; }
         }
 
-        public int Height{
+        public int Height
+        {
             get { return _height; }
         }
-        
+
         public double BmiScore
         {
-            get { 
+            get
+            {
                 double bmi = _weight / _height * _height * 703;
                 return bmi;
-                }
+            }
         }
         public string BmiStatus
         {
-            get { 
+            get
+            {
                 return "status";
             }
         }

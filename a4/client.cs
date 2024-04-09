@@ -1,6 +1,6 @@
 
 
-namespace Client
+namespace ClientInfor
 {
     public class Client
     {
@@ -55,7 +55,7 @@ namespace Client
         {
             get { return $"{_lastname}, {_firstname}"; }
         }
-        
+
 
     }// end of class
 

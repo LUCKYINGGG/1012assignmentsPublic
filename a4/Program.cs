@@ -14,7 +14,6 @@ while (loopAgain)
             myClient = NewClient();
         if (mainMenuChoice == "S")
             ShowClientInfo(myClient);
-
         if (mainMenuChoice == "A")
             AddClientToList(myClient, listOfClient);
         if (mainMenuChoice == "F")
@@ -121,12 +120,8 @@ double PromptDoubleBetweenMinMax(String msg, double min, double max)
 
 void ShowClientInfo(Client client)
 {
-    
+
 }
-
-
-
-
 
 Client NewClient()
 {
@@ -165,17 +160,17 @@ Client FindClientInList(List<Client> listOfClient)
     return myClient;
 }
 
-void RemoveClientFromList()
+void RemoveClientFromList(Client myClient, List<Client> listOfClient)
 {
 
 }
 
-void DisplayAllClientInList()
+void DisplayAllClientInList(List<Client> listOfClient)
 {
 
 }
 
-void SaveMemoryValuesToFile()
+void SaveMemoryValuesToFile(List<Client> listOfClient)
 {
-    
+
 }

@@ -1,6 +1,7 @@
 ﻿using ClientInfor;
 
 Client myClient = new Client();
+List<Client> listOfClient = [];
 
 bool loopAgain = true;
 while (loopAgain)
@@ -12,19 +13,19 @@ while (loopAgain)
         if (mainMenuChoice == "N")
             myClient = NewClient();
         if (mainMenuChoice == "S")
-            ShowPetInfo(myClient);
+            ShowClientInfo(myClient);
 
         if (mainMenuChoice == "A")
-            AddPetToList(myClient, listOfPets);
+            AddClientToList(myClient, listOfClient);
         if (mainMenuChoice == "F")
-            myClient = FindPetInList(listOfPets);
+            myClient = FindClientInList(listOfClient);
         if (mainMenuChoice == "R")
-            RemovePetFromList(myClient, listOfPets);
+            RemoveClientFromList(myClient, listOfClient);
         if (mainMenuChoice == "D")
-            DisplayAllPetsInList(listOfPets);
+            DisplayAllClientInList(listOfClient);
         if (mainMenuChoice == "Q")
         {
-            SaveMemoryValuesToFile(listOfPets);
+            SaveMemoryValuesToFile(listOfClient);
             loopAgain = false;
             throw new Exception("Bye, hope to see you again.");
         }
@@ -34,16 +35,14 @@ while (loopAgain)
             {
                 DisplayEditMenu();
                 string editMenuChoice = Prompt("\nEnter a Edit Menu Choice: ").ToUpper();
-                if (editMenuChoice == "T")
-                    GetTag(myClient);
-                if (editMenuChoice == "N")
-                    GetName(myClient);
-                if (editMenuChoice == "A")
-                    GetAge(myClient);
+                if (editMenuChoice == "F")
+                    GetFirstName(myClient);
+                if (editMenuChoice == "L")
+                    GetLastName(myClient);
                 if (editMenuChoice == "W")
                     GetWeight(myClient);
-                if (editMenuChoice == "P")
-                    GetType(myClient);
+                if (editMenuChoice == "H")
+                    GetHeight(myClient);
                 if (editMenuChoice == "R")
                     throw new Exception("Returning to Main Menu");
             }
@@ -58,24 +57,23 @@ while (loopAgain)
 void DisplayMainMenu()
 {
     Console.WriteLine("\nMain Menu");
-    Console.WriteLine("N) New Pet PartA");
-    Console.WriteLine("S) Show Pet Info PartA");
-    Console.WriteLine("E) Edit Pet Info PartA");
-    Console.WriteLine("A) Add Pet To List PartB");
-    Console.WriteLine("F) Find Pet In List PartB");
-    Console.WriteLine("R) Remove Pet From List PartB");
-    Console.WriteLine("D) Display all Pets in List PartB");
+    Console.WriteLine("N) New Client PartA");
+    Console.WriteLine("S) Show Client Info PartA");
+    Console.WriteLine("E) Edit Client Info PartA");
+    Console.WriteLine("A) Add Client To List PartB");
+    Console.WriteLine("F) Find Client In List PartB");
+    Console.WriteLine("R) Remove Client From List PartB");
+    Console.WriteLine("D) Display all Clients in List PartB");
     Console.WriteLine("Q) Quit");
 }
 
 void DisplayEditMenu()
 {
     Console.WriteLine("Edit Menu");
-    Console.WriteLine("T) Tag");
-    Console.WriteLine("N) Name");
-    Console.WriteLine("A) Age");
+    Console.WriteLine("F) Firstname");
+    Console.WriteLine("L) Lastname");
     Console.WriteLine("W) Weight");
-    Console.WriteLine("P) Type");
+    Console.WriteLine("H) Height");
     Console.WriteLine("R) Return to Main Menu");
 }
 
@@ -121,8 +119,63 @@ double PromptDoubleBetweenMinMax(String msg, double min, double max)
     return num;
 }
 
+void ShowClientInfo(Client client)
+{
+    
+}
+
+
+
+
+
 Client NewClient()
 {
-
+    Client myClient = new Client();
+    GetFirstName(myClient);
+    GetLastName(myClient);
+    GetWeight(myClient);
+    GetHeight(myClient);
     return myClient;
+}
+
+void GetFirstName(Client myClient)
+{
+
+}
+void GetLastName(Client myClient)
+{
+
+}
+void GetWeight(Client myClient)
+{
+
+}
+void GetHeight(Client myClient)
+{
+
+}
+
+void AddClientToList(Client myClient, List<Client> listOfClient)
+{
+
+}
+
+Client FindClientInList(List<Client> listOfClient)
+{
+    return myClient;
+}
+
+void RemoveClientFromList()
+{
+
+}
+
+void DisplayAllClientInList()
+{
+
+}
+
+void SaveMemoryValuesToFile()
+{
+    
 }

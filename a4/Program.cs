@@ -97,17 +97,17 @@ string Prompt(string prompt)
     return myString;
 }
 
-double PromptDoubleBetweenMinMax(String msg, double min, double max)
+int PromptIntBetweenMinMax(String msg, int min, int max)
 {
-    double num = 0;
+    int num = 0;
     while (true)
     {
         try
         {
             Console.Write($"{msg} between {min} and {max} inclusive: ");
-            num = double.Parse(Console.ReadLine());
+            num = int.Parse(Console.ReadLine());
             if (num < min || num > max)
-                throw new Exception($"Must be between {min:n2} and {max:n2}");
+                throw new Exception($"Must be between {min} and {max}");
             break;
         }
         catch (Exception ex)
@@ -120,6 +120,10 @@ double PromptDoubleBetweenMinMax(String msg, double min, double max)
 
 void ShowClientInfo(Client client)
 {
+    if (client == null)
+    {
+        throw new Exception($"No client in memory.");
+    }
 
 }
 
@@ -135,24 +139,28 @@ Client NewClient()
 
 void GetFirstName(Client myClient)
 {
-
+    string firstName = Prompt($"Enter firstname: ");
+    myClient.Firstname = firstName;
 }
 void GetLastName(Client myClient)
 {
-
+    string lastname = Prompt($"Enter lastname");
+    myClient.Lastname = lastname;
 }
 void GetWeight(Client myClient)
 {
-
+    int weight = PromptIntBetweenMinMax("Enter weight in pounds: ", 0, 800);
+    myClient.Weight = weight;
 }
 void GetHeight(Client myClient)
 {
-
+    int height = PromptIntBetweenMinMax("Enter height in inches", 0, 100);
+    myClient.Height = height;
 }
 
 void AddClientToList(Client myClient, List<Client> listOfClient)
 {
-
+    listOfClient.Add(myClient);
 }
 
 Client FindClientInList(List<Client> listOfClient)

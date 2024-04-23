@@ -12,47 +12,78 @@ namespace ClientInfor
         //non-greedy constructor
         public Client()
         {
-            _firstname = "";
-            _lastname = "";
-            _weight = 0;
-            _height = 0;
+            Firstname = "";
+            Lastname = "";
+            Weight = 0;
+            Height = 0;
         }
 
         //greedy constructor
         public Client(string firstname, string lastname, int weight, int height)
         {
-            _firstname = firstname;
-            _lastname = lastname;
-            _weight = weight;
-            _height = height;
+            Firstname = firstname;
+            Lastname = lastname;
+            Weight = weight;
+            Height = height;
         }
 
         //Properties
         public string Firstname
         {
             get { return _firstname; }
-            set { _firstname = value; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Firstname is required. Must not be empty or blank.");
+                }
+                _firstname = char.ToUpper(value[0]) + value.Substring(1).ToLower();
+            }
         }
         public string Lastname
         {
             get { return _lastname; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Lastname is required. Must not be empty or blank.");
+                }
+                _lastname = char.ToUpper(value[0]) + value.Substring(1).ToLower();
+            }
         }
 
         public int Weight
         {
             get { return _weight; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException("Height must be a positive value (0 or greater)");
+                }
+                _weight = value;
+            }
         }
 
         public int Height
         {
             get { return _height; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException("Height must be a positive value (0 or greater)");
+                }
+                _height = value;
+            }
         }
-
+        // Read only properties
         public double BmiScore
         {
             get
             {
-                double bmi = _weight / _height * _height * 703;
+                double bmi = Convert.ToDouble(Weight) / (Height * Height) * 703;
                 return bmi;
             }
         }
@@ -60,16 +91,32 @@ namespace ClientInfor
         {
             get
             {
-                return "status";
+                string status = "";
+                if (BmiScore >= 40)
+                {
+                    status = "Obese";
+                }
+                if (BmiScore >= 25.0 && BmiScore <= 39.9)
+                {
+                    status = "Overweight";
+                }
+                if (BmiScore >= 18.5 && BmiScore <= 24.9)
+                {
+                    status = "Normal";
+                }
+                else
+                {
+                    status = "Underweight";
+                }
+                return status;
             }
         }
 
-        public string FullName
+        // method
+        public string FullName()
         {
-            get { return $"{_lastname}, {_firstname}"; }
+            return $"{Lastname}, {Firstname}";
         }
-
-
     }// end of class
 
 }// end of namespace

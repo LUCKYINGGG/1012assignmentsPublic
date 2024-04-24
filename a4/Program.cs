@@ -1,7 +1,9 @@
 ﻿using ClientInfor;
 
 Client myClient = new Client();
-List<Client> listOfClient = [];
+List<Client> listofClients = new List<Client>();
+
+LoadFileValuesToMemory(listofClients);
 
 bool loopAgain = true;
 while (loopAgain)
@@ -15,16 +17,16 @@ while (loopAgain)
         if (mainMenuChoice == "S")
             ShowClientInfo(myClient);
         if (mainMenuChoice == "A")
-            AddClientToList(myClient, listOfClient);
+            AddClientToList(myClient, listofClients);
         if (mainMenuChoice == "F")
-            myClient = FindClientInList(listOfClient);
+            myClient = FindClientInList(listofClients);
         if (mainMenuChoice == "R")
-            RemoveClientFromList(myClient, listOfClient);
+            RemoveClientFromList(myClient, listofClients);
         if (mainMenuChoice == "D")
-            DisplayAllClientInList(listOfClient);
+            DisplayAllClientInList(listofClients);
         if (mainMenuChoice == "Q")
         {
-            SaveMemoryValuesToFile(listOfClient);
+            SaveMemoryValuesToFile(listofClients);
             loopAgain = false;
             throw new Exception("Bye, hope to see you again.");
         }
@@ -124,6 +126,9 @@ void ShowClientInfo(Client client)
     {
         throw new Exception($"No client in memory.");
     }
+    Console.WriteLine($"Client Name:\t{client.FullName}");
+    Console.WriteLine($"Bmi Score:\t{client.BmiScore}");
+    Console.WriteLine($"Bmi Status:\t{client.BmiStatus}");
 
 }
 
@@ -158,27 +163,91 @@ void GetHeight(Client myClient)
     myClient.Height = height;
 }
 
-void AddClientToList(Client myClient, List<Client> listOfClient)
+void AddClientToList(Client myClient, List<Client> listofClients)
 {
-    listOfClient.Add(myClient);
+    if (myClient == null)
+    {
+        throw new ArgumentNullException($"No client provided to add to list.");
+    }
+    listofClients.Add(myClient);
+    Console.WriteLine($"Client added.");
 }
 
-Client FindClientInList(List<Client> listOfClient)
+Client FindClientInList(List<Client> listofClients)
 {
-    return myClient;
+    string myString = Prompt($"Enter partial pet name: ");
+    foreach (Client client in listofClients)
+    {
+        if (client.FullName.Contains(myString))
+        {
+            return client;
+        }
+        else
+        {
+            Console.WriteLine("No clients match.");
+        }
+    }
+    return null;
 }
 
-void RemoveClientFromList(Client myClient, List<Client> listOfClient)
+void RemoveClientFromList(Client myClient, List<Client> listofClients)
 {
-
+    if (myClient == null)
+    {
+        throw new ArgumentNullException($"No client provided to remove from list.");
+    }
+    listofClients.Remove(myClient);
+    Console.WriteLine($"Client removed.");
 }
 
-void DisplayAllClientInList(List<Client> listOfClient)
+void DisplayAllClientInList(List<Client> listofClients)
 {
-
+    foreach (Client client in listofClients)
+    {
+        ShowClientInfo(client);
+    }
 }
 
-void SaveMemoryValuesToFile(List<Client> listOfClient)
+void LoadFileValuesToMemory(List<Client> listOfClients)
 {
+    while (true)
+    {
+        try
+        {
+            string fileName = "regin.csv";
+            string filePath = $"./data/{fileName}";
+            //Console.WriteLine($"{filePath}");
+            if (!File.Exists(filePath))
+            {
+                throw new Exception($"The file {fileName} does not exist.");
+            }
+            string[] csvFileInput = File.ReadAllLines(filePath);
+            for (int i = 0; i < csvFileInput.Length; i++)
+            {
+                string[] items = csvFileInput[i].Split(",");
+                Client myClient = new Client(items[0], items[1], int.Parse(items[2]), int.Parse(items[3]));
+                listOfClients.Add(myClient);
+            }
+            Console.WriteLine($"Load complete. {fileName} has {listOfClients.Count} data entries.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}");
+        }
+    }
+}
 
+
+void SaveMemoryValuesToFile(List<Client> listofClients)
+{
+    string fileName = "regout.csv";
+    string filePath = $"./data/{fileName}";
+    string[] csvLines = new string[listofClients.Count];
+    for (int i = 0; i < listofClients.Count; i++)
+    {
+        csvLines[i] = listofClients[i].FullName + listofClients[i].BmiScore + listofClients[i].BmiStatus;
+    }
+    File.WriteAllLines(filePath, csvLines);
+    Console.WriteLine($"Save complete. {fileName} has {listofClients.Count} entries.");
 }

@@ -12,10 +12,10 @@ namespace ClientInfor
         //non-greedy constructor
         public Client()
         {
-            Firstname = "";
-            Lastname = "";
-            Weight = 0;
-            Height = 0;
+            Firstname = "Demo";
+            Lastname = "One";
+            Weight = 1;
+            Height = 1;
         }
 
         //greedy constructor
@@ -111,11 +111,13 @@ namespace ClientInfor
                 return status;
             }
         }
-
         // method
-        public string FullName()
+        public string FullName
         {
-            return $"{Lastname}, {Firstname}";
+            get
+            {
+                return $"{Lastname}, {Firstname}";
+            }
         }
     }// end of class
 

@@ -199,9 +199,9 @@ void RemoveClientFromList(Client myClient, List<Client> listofClients)
     Console.WriteLine($"Client removed.");
 }
 
-void DisplayAllClientInList(List<Client> listofClients)
+void DisplayAllClientInList(List<Client> listOfClients)
 {
-    foreach (Client client in listofClients)
+    foreach (Client client in listOfClients)
     {
         ShowClientInfo(client);
     }

@@ -58,9 +58,9 @@ namespace ClientInfor
             get { return _weight; }
             set
             {
-                if (value < 0)
+                if (value <= 0)
                 {
-                    throw new ArgumentException("Height must be a positive value (0 or greater)");
+                    throw new ArgumentException("Height must be a positive value.");
                 }
                 _weight = value;
             }
@@ -71,9 +71,9 @@ namespace ClientInfor
             get { return _height; }
             set
             {
-                if (value < 0)
+                if (value <= 0)
                 {
-                    throw new ArgumentException("Height must be a positive value (0 or greater)");
+                    throw new ArgumentException("Height must be a positive value.");
                 }
                 _height = value;
             }
@@ -91,7 +91,7 @@ namespace ClientInfor
         {
             get
             {
-                string status = "";
+                string status = string.Empty;
                 if (BmiScore >= 40)
                 {
                     status = "Obese";

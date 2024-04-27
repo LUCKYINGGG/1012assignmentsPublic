@@ -128,7 +128,7 @@ void ShowClientInfo(Client client)
     }
     Console.WriteLine($"Client Name:\t{client.FullName}");
     Console.WriteLine($"Bmi Score:\t{client.BmiScore}");
-    Console.WriteLine($"Bmi Status:\t{client.BmiStatus}");
+    Console.WriteLine($"Bmi Status:\t{client.BmiStatus}\n");
 
 }
 
@@ -139,6 +139,7 @@ Client NewClient()
     GetLastName(myClient);
     GetWeight(myClient);
     GetHeight(myClient);
+    Console.WriteLine($"New client has added into memory.");
     return myClient;
 }
 
@@ -149,7 +150,7 @@ void GetFirstName(Client myClient)
 }
 void GetLastName(Client myClient)
 {
-    string lastname = Prompt($"Enter lastname");
+    string lastname = Prompt($"Enter lastname: ");
     myClient.Lastname = lastname;
 }
 void GetWeight(Client myClient)
@@ -170,23 +171,21 @@ void AddClientToList(Client myClient, List<Client> listofClients)
         throw new ArgumentNullException($"No client provided to add to list.");
     }
     listofClients.Add(myClient);
-    Console.WriteLine($"Client added.");
+    Console.WriteLine($"New client has added to list.");
 }
 
 Client FindClientInList(List<Client> listofClients)
 {
-    string myString = Prompt($"Enter partial pet name: ");
+    string myString = Prompt($"Enter partial client name: ");
     foreach (Client client in listofClients)
     {
-        if (client.FullName.Contains(myString))
+        if (client.FullName.Contains(myString, StringComparison.OrdinalIgnoreCase))
         {
+            ShowClientInfo(client);
             return client;
         }
-        else
-        {
-            Console.WriteLine("No clients match.");
-        }
     }
+    Console.WriteLine("No clients match.");
     return null;
 }
 
@@ -246,7 +245,7 @@ void SaveMemoryValuesToFile(List<Client> listofClients)
     string[] csvLines = new string[listofClients.Count];
     for (int i = 0; i < listofClients.Count; i++)
     {
-        csvLines[i] = listofClients[i].FullName + listofClients[i].BmiScore + listofClients[i].BmiStatus;
+        csvLines[i] = listofClients[i].FullName + ',' + listofClients[i].Weight + ',' + listofClients[i].Height;
     }
     File.WriteAllLines(filePath, csvLines);
     Console.WriteLine($"Save complete. {fileName} has {listofClients.Count} entries.");

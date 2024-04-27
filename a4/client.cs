@@ -83,7 +83,7 @@ namespace ClientInfor
         {
             get
             {
-                double bmi = Convert.ToDouble(Weight) / (Height * Height) * 703;
+                double bmi = Math.Round(Convert.ToDouble(Weight) / (Height * Height) * 703, 2);
                 return bmi;
             }
         }
@@ -96,11 +96,11 @@ namespace ClientInfor
                 {
                     status = "Obese";
                 }
-                if (BmiScore >= 25.0 && BmiScore <= 39.9)
+                else if (BmiScore >= 25.0 && BmiScore < 40)
                 {
                     status = "Overweight";
                 }
-                if (BmiScore >= 18.5 && BmiScore <= 24.9)
+                else if (BmiScore >= 18.5 && BmiScore < 25.0)
                 {
                     status = "Normal";
                 }
@@ -111,12 +111,11 @@ namespace ClientInfor
                 return status;
             }
         }
-        // method
         public string FullName
         {
             get
             {
-                return $"{Lastname}, {Firstname}";
+                return $"{Lastname},{Firstname}";
             }
         }
     }// end of class
